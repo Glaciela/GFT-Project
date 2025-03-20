@@ -1,0 +1,10 @@
+{% include 'permission/partials/head.html'%}
+<body>
+    {% include 'permission/partials/header.html'%}
+    {% include 'permission/partials/search.html'%}
+    <main class="main-content-container">
+       {% block content %}{% endblock content %}
+    </main>
+    {% include 'permission/partials/footer.html'%}
+</body>
+</html>

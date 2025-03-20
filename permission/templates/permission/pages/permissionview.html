@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glaciela</title>
-</head>
-<body>
-    Pagina permissão do projeto
-</body>
-</html>
+{% extends "global/base.html" %}
+
+{% block content %}
+<div class="main-content main-content-detail container">
+    {% include 'permission/partials/permission.html' with i=3 %}
+</div>
+{% endblock content %}

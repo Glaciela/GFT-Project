@@ -1,14 +1,11 @@
-{% include 'permission/partials/head.html'%}
-<body>
-    <header class="main-header-container">
-        <div class="main-header container">
-            <h1>
-                <a class="main-logo" href="/">
-                    <i class="fa fa-car main-logo-icon"></i>
-                    <span>Permissões na via pública</span>
-                </a>
-            </h1>
-        </div>
-    </header>
-</body>
-</html>
+{% extends "global/base.html" %}
+
+{% block content %}
+<div class="main-content main-content-list container">
+    {% include 'permission/partials/permission.html' with i=0 %}
+    {% include 'permission/partials/permission.html' with i=1 %}
+    {% include 'permission/partials/permission.html' with i=2 %}
+    {% include 'permission/partials/permission.html' with i=3 %}
+    {% include 'permission/partials/permission.html' with i=4 %}
+</div>
+{% endblock content %}
