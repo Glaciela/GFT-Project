@@ -1,7 +1,9 @@
 {% extends "global/base.html" %}
 
+{% block title%}{{permission.order}} |{% endblock title%}
+
 {% block content %}
 <div class="main-content main-content-detail container">
-    {% include 'permission/partials/permission.html' with i=3 %}
+    {% include 'permission/partials/permission.html' %}
 </div>
 {% endblock content %}
