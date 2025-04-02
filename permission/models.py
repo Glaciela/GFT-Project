@@ -22,7 +22,7 @@ class Permission(models.Model):
         )
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
-    is_publihed = models.BooleanField(default=False)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.reason} na {self.location} solicitado por {self.author}'

@@ -44,7 +44,7 @@
         {% if permission.author is not None %}
             <span class="permission-author-item">
                 <i class="fas fa-user"></i>
-                {{permission.author.username}}
+                {{permission.author.first_name}} {{permission.author.last_name}}
             </span>
         {% endif %}
         <br>

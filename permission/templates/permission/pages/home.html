@@ -5,7 +5,11 @@
 {% block content %}
 <div class="main-content main-content-list container">
     {%for permission in permissions%}
-    {% include 'permission/partials/permission.html' %}
+        {% include 'permission/partials/permission.html' %}
+    {%empty%}
+        <div class='center'>
+            <h1>Não existem permissões⚠️</h1>
+        </div>
     {% endfor %}
 </div>
 {% endblock content %}
