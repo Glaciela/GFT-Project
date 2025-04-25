@@ -1,5 +1,6 @@
 from django.test import TestCase
 from permission.models import Permission, Interdiction, User
+from django.utils import timezone
 class PermissionTestBase(TestCase):
     # executado antes de chamar os métodos de testes
     def setUp(self) -> None:
@@ -30,13 +31,13 @@ class PermissionTestBase(TestCase):
         self,
         slug='slug',
         location='Local',
-        description='Descritivo',
+        description='Descrição',
         order='Ordem',
         author_data=None,
-        date_search='2021-01-01',    
+        date_search='2025-01-01',    
         reason_data=None,
-        date_start='2021-01-01',
-        date_end='2021-01-01',
+        date_start=timezone.now(),
+        date_end=timezone.now(),
         is_published=True,
         ):  
         

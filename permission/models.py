@@ -10,7 +10,7 @@ class Interdiction(models.Model):
         return self.name
 
 class Permission(models.Model):
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     location = models.CharField(max_length=65)
     description = models.CharField(max_length=65)
     order = models.CharField(max_length=65)

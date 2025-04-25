@@ -23,6 +23,7 @@ class PermissionViewsTest(PermissionTestBase):
              '<h1>Não existem permissões⚠️</h1>',
              response.content.decode('utf-8')
         )
+        #Função para forcar o teste a falhar
         #self.fail('Falhou!')
 
     def test_permission_home_templates_loads_permissions(self):
@@ -36,8 +37,20 @@ class PermissionViewsTest(PermissionTestBase):
         self.assertEqual(len(response_context_permissions), 1)
         self.assertIn('Ordem', content)
         self.assertIn('Local', content)
-        self.assertIn('Descritivo', content)
+        self.assertIn('Descrição', content)
         self.assertIn('Evento', content)
+
+    def test_permission_home_templates_dont_loads_permissions_not_published(self):
+
+        # É necessário pelo menos uma permissão para executar o teste
+        self.make_permission(is_published=False)
+
+        response = self.client.get(reverse('permission:home'))
+
+        self.assertIn(
+             '<h1>Não existem permissões⚠️</h1>',
+             response.content.decode('utf-8')
+        )
 
 ################################### TESTES INTERDIÇÕES ###################################
     def test_permission_interdiction_view_funcion_is_correct(self):
@@ -62,6 +75,18 @@ class PermissionViewsTest(PermissionTestBase):
 
         self.assertIn(new_location, content)
 
+    
+    def test_permission_interdiction_templates_dont_loads_permissions_not_published(self):
+
+        # É necessário pelo menos uma permissão para executar o teste
+        permission = self.make_permission(is_published=False)
+
+        response = self.client.get(
+            reverse('permission:interdiction', kwargs={'interdiction_id': permission.reason.id})
+            )
+
+        self.assertEqual(response.status_code, 404)
+
 ################################### TESTES PERMISSÕES ###################################
     def test_permission_detail_view_funcion_is_correct(self):
         view = resolve(
@@ -76,7 +101,7 @@ class PermissionViewsTest(PermissionTestBase):
         self.assertEqual(response.status_code, 404)
 
     def test_permission_detail_template_loads_the_correct_permission(self):
-        new_location = 'Uma permissao'
+        new_location = 'Rua 14 de julho'
         # É necessário pelo menos uma permissão para executar o teste
         self.make_permission(location=new_location)
 
@@ -88,3 +113,14 @@ class PermissionViewsTest(PermissionTestBase):
         content = response.content.decode('utf-8')
 
         self.assertIn(new_location, content)
+
+    def test_permission_detail_templates_dont_loads_permissions_not_published(self):
+
+        # É necessário pelo menos uma permissão para executar o teste
+        permission = self.make_permission(is_published=False)
+
+        response = self.client.get(
+            reverse('permission:permission', kwargs={'id': permission.id})
+            )
+
+        self.assertEqual(response.status_code, 404)
