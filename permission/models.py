@@ -12,17 +12,19 @@ class Interdiction(models.Model):
 class Permission(models.Model):
     slug = models.SlugField(unique=True)
     location = models.CharField(max_length=65)
+    lat = models.CharField(max_length=15, null=True)
+    lon = models.CharField(max_length=15, null=True)
     description = models.CharField(max_length=65)
     order = models.CharField(max_length=65)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    date_search = models.DateField()
+    date_register = models.DateField()
     reason = models.ForeignKey(
         Interdiction, on_delete=models.SET_NULL, null=True,
         blank=True, default=None
         )
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
-    is_published = models.BooleanField(default=False)
+    authorized = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.reason} na {self.location} solicitado por {self.author}'

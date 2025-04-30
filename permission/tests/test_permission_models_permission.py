@@ -14,10 +14,12 @@ class PermissionModelsTest(PermissionTestBase):
             description='Descrição',
             order='Ordem',
             author=self.make_user(username='newauthor'),
-            date_search='2025-01-01',    
+            date_register='2025-01-01',    
             reason=self.make_interdiction(name='newreason'),
             date_start=timezone.now(),
-            date_end=timezone.now(),      
+            date_end=timezone.now(),
+            lat =0.0,
+            lon =0.0,      
         )
         permission.full_clean()
         permission.save()   
@@ -35,7 +37,7 @@ class PermissionModelsTest(PermissionTestBase):
 
     def test_permission_is_published_is_false_by_default(self):
         permission = self.make_permission_no_defaults()
-        self.assertFalse(permission.is_published, msg='is_published é verdadeiro por padrão')
+        self.assertFalse(permission.authorized, msg='is_published é verdadeiro por padrão')
 
     def test_permission_string_representation(self):
         self.permission.location = 'newlocation'

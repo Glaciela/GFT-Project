@@ -34,11 +34,13 @@ class PermissionTestBase(TestCase):
         description='Descrição',
         order='Ordem',
         author_data=None,
-        date_search='2025-01-01',    
+        date_register='2025-01-01',    
         reason_data=None,
         date_start=timezone.now(),
         date_end=timezone.now(),
-        is_published=True,
+        authorized=True,
+        lat=0.0,
+        lon=0.0,
         ):  
         
         if author_data is None:
@@ -53,9 +55,11 @@ class PermissionTestBase(TestCase):
             description=description,
             order=order,
             author=self.make_user(**author_data),
-            date_search=date_search,
+            date_register=date_register,
             reason=self.make_interdiction(**reason_data),
             date_start=date_start,
             date_end=date_end,
-            is_published=is_published,
+            authorized=authorized,
+            lat=lat,
+            lon=lon,
         )

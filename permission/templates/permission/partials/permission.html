@@ -8,10 +8,20 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
+      
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                var lat = -20.524820 ;
-                var lng = -54.599175 ;
+
+                var lat = -20.524820;
+                var lng = -54.599175;
+
+                {% if permission.lat is not None %}
+                    lat = {{ permission.lat }};
+                {% endif %}
+                {% if permission.lon is not None %}
+                    lng = {{ permission.lon }};
+                {% endif %}
+
                 var map = L.map('map{{ permission.id }}').setView([lat, lng], 17);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
