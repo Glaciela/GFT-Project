@@ -2,14 +2,22 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import Http404
 #from utils.permission.factory import make_permission
 from .models import Permission
+from utils.pagination import make_pagination
+
+import os
+
+PER_PAGE = int(os.environ.get('PER_PAGE', 6))
 
 def home(request):
     permissions = Permission.objects.filter(
             authorized=True
         ).order_by('date_start')
       
+    pag_obj, pagination_range = make_pagination(request, permissions, PER_PAGE)
+
     return render( request, 'permission/pages/home.html', context={
-        'permissions':permissions,
+        'permissions':pag_obj,
+        'pagination_range': pagination_range,
         })
 
 def interdiction(request, interdiction_id):
@@ -20,8 +28,11 @@ def interdiction(request, interdiction_id):
         ).order_by('date_start')
         )
     
+    pag_obj, pagination_range = make_pagination(request, permissions, PER_PAGE)
+
     return render( request, 'permission/pages/interdiction.html', context={
-        'permissions':permissions,  
+        'permissions': pag_obj,
+        'pagination_range': pagination_range,
         'title': f'{permissions[0].reason.name} - Interdição | ',
         })
 
@@ -43,10 +54,15 @@ def search(request):
         location__icontains=search_term,
     ).order_by('date_start')
 
+    pag_obj, pagination_range = make_pagination(request, permissions, PER_PAGE)
+
+
     return render(request, 'permission/pages/search.html',
                   {
                       'page_title': f'Busca por "{search_term}" | ',
                       'search_term': search_term,
-                      'permissions':permissions,
+                      'permissions':pag_obj,
+                      'pagination_range': pagination_range,
+                      'additional_url_query': f'&q={search_term}',
                   }
                   )
