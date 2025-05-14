@@ -3,6 +3,9 @@
 {% block title%}Permissões |{% endblock title%}
 
 {% block content %}
+
+{% include 'partials/messages.html' %}
+
 <div class="main-content main-content-list container">
     {%for permission in permissions%}
         {% include 'permission/partials/permission.html' %}

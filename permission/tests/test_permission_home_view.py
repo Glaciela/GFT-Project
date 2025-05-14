@@ -1,6 +1,7 @@
 from django.urls import reverse, resolve
 from permission import views
 from .teste_permission_base import PermissionTestBase
+from unittest.mock import patch
 
 class PermissionHomeViewTest(PermissionTestBase):
 
@@ -50,3 +51,17 @@ class PermissionHomeViewTest(PermissionTestBase):
              '<h1>Não existem permissões⚠️</h1>',
              response.content.decode('utf-8')
         )
+    # @patch('permission.views.PER_PAGE', new=2)
+    def test_permission_home_is_paginated(self):
+        for i  in range(9):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            self.make_permission(**kwargs)
+
+        with patch('permission.views.PER_PAGE', new=4):
+            response = self.client.get(reverse('permission:home'))
+            permissions = response.context['permissions']
+            paginator = permissions.paginator
+            self.assertEqual(paginator.num_pages, 3)
+            self.assertEqual(len(paginator.get_page(1)), 4)
+            self.assertEqual(len(paginator.get_page(3)), 1)
+      
