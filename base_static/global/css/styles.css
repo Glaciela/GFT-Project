@@ -361,14 +361,21 @@ h6 {
     margin-bottom: var(--spacing-gutter-medium);
 }
 
-.form-content label, 
-.help-text,
-.errorlist {
+.form-content label {
     display: block;
     margin: 0.5rem 0;
     font-size: 1.2rem;
     list-style: none;
 }
+
+.help-text,
+.errorlist {
+    display: block;
+    margin: 0.5rem 0;
+    font-size: 0.8rem;
+    list-style: none;
+}
+
 
 .errorlist {
     color: var(--color-error-dark);
@@ -396,4 +403,5 @@ h6 {
     border: none;
     background-color: var(--color-primary-dark);
     color: var(--color-white);
+    border-radius: .4rem;
 }
