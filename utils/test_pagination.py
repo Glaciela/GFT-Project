@@ -50,3 +50,4 @@ class PaginationTest(TestCase):
         current_page=19
     )['pagination']
         self.assertEqual(pagination, [17, 18, 19, 20])
+

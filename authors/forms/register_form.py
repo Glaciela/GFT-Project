@@ -1,15 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 import re
+from django.core.exceptions import ValidationError
 
-# def strong_password(password):
-#     regex = re.compile(r'^(?=.*[A-Za-z])(?=.[0-9]).{8,}$')
-#     if not regex.match(password):
-#         raise forms.ValidationError(
-#             'A senha deve ter pelo menos 8 caracteres, '
-#             'uma letra minúscula, uma letra maiúscula '
-#             'e um número.'
-#         )
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,7 +11,6 @@ class RegisterForm(forms.ModelForm):
         label='Repita sua Senha',
         widget=forms.PasswordInput(attrs={'placeholder': 'Repita aqui sua senha'}),
         error_messages={'required': 'Repita sua senha não pode estar vazia.'},
-        # validators=[strong_password],
     )
     class Meta:
         model = User
@@ -82,6 +74,16 @@ class RegisterForm(forms.ModelForm):
         label='Senha',
     )
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email','')
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+              raise ValidationError(
+                   'E-mail já existe', code = 'invalid',
+              )
+
+        return email
     
     def clean(self):
         cleaned_data = super().clean()
@@ -99,7 +101,7 @@ class RegisterForm(forms.ModelForm):
                 "password": 'As senhas não coincidem.'
                 })
         
-        regex = re.compile(r'^(?=.*[A-Za-z])(?=.[0-9]).{8,}$')
+        regex = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$')
         if not regex.match(password):
             raise forms.ValidationError({
             "password":

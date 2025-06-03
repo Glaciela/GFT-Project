@@ -59,14 +59,14 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     ])
     def test_fields_cannot_be_empty(self, field, msg):
         self.form_data[field] = ''
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get(field))
 
     def test_username_field_min_lenght_shoud_be_4(self):
         self.form_data['username'] = 'joh'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         msg = 'Username deve ter no minimo 4 caracteres.'
         self.assertIn(msg, response.content.decode('utf-8'))
@@ -74,7 +74,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     def test_username_field_max_lenght_shoud_be_150(self):
         self.form_data['username'] = 'A' * 151
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         msg = 'Username deve ter no maximo 150 caracteres.'
         self.assertIn(msg, response.content.decode('utf-8'))
@@ -83,7 +83,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     def test_password_field_is_correct(self):
         self.form_data['password'] = '123abcA'
         self.form_data['password2'] = '123abcA'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         msg = 'A senha deve ter pelo menos 8 caracteres, uma letra minúscula, uma letra maiúscula e um número.'
         self.assertIn(msg, response.content.decode('utf-8'))
@@ -92,10 +92,41 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
     def test_password_and_password2_are_equal(self):
         self.form_data['password'] = '123abcA'
         self.form_data['password2'] = '123'
-        url = reverse('authors:create')
+        url = reverse('authors:register_create')
         response = self.client.post(url, data=self.form_data, follow=True)
         msg = 'As senhas não coincidem.'
         self.assertIn(msg, response.content.decode('utf-8'))
         self.assertIn(msg, response.context['form'].errors.get('password'))
-       
-    
+
+    def test_send_get_request_to_registration_create_view_returns_404(self):
+        url = reverse('authors:register_create')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_email_field_must_be_unique(self):
+        url = reverse('authors:register_create')
+        self.client.post(url, data=self.form_data, follow=True)
+        response = self.client.post(url, data=self.form_data, follow=True)
+
+        msg = 'E-mail já existe'
+        self.assertIn(msg,response.context['form'].errors.get('email'))
+        self.assertIn(msg, response.content.decode('utf-8'))
+
+    def test_author_created_can_login(self):
+        url = reverse('authors:register_create')
+
+        self.form_data.update({
+            'username': 'johndoe',
+            'password': '12345678aA',
+            'password2': '12345678aA',
+        })
+
+        self.client.post(url, data=self.form_data, follow=True)
+
+        is_authenticated = self.client.login(
+            username='johndoe',
+            password='12345678aA'
+        )
+
+        self.assertTrue(is_authenticated)
+
